@@ -12,6 +12,7 @@ import signal
 run = True
 
 def sigHandler(signum, frame):
+    global run
     print "\nTerminating..."
     run = False    
 
@@ -37,8 +38,8 @@ if __name__ == "__main__":
 
     #Change host and timeout 
     #timeout should be greater that the latency of the highest latency path.
-    host = "192.168.1.101"
-    timeout = 0.01 #timeout in seconds
+    host = "172.16.12.1"
+    timeout = 0.015 #timeout in seconds
 
     pid = os.getgid()
     if pid > 65535:
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     while run:
         if seq >= 65535:
             #reset sequence
-            print "\nSeq exceeded, starting over"
+            # print "\nSeq exceeded, starting over"
             seq = 0
             packetsLost = 0
             discardedPackets = []
@@ -110,4 +111,5 @@ if __name__ == "__main__":
                     packetsLost = 0
             seq += 1
             sock.send(str(createEchoRequest(pid, seq)))
-               
+    sock.close()
+    
